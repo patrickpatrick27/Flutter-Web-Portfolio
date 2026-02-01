@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class FadeSlideTransition extends StatefulWidget {
   final Widget child;
   final Duration delay;
+  final Offset offset; // Allow custom slide distance
 
   const FadeSlideTransition({
     super.key, 
     required this.child, 
-    this.delay = const Duration(milliseconds: 0)
+    this.delay = const Duration(milliseconds: 0),
+    this.offset = const Offset(0, 0.35), // DEFAULT: Slides up 35% (Much more visible)
   });
 
   @override
@@ -28,16 +30,20 @@ class _FadeSlideTransitionState extends State<FadeSlideTransition> with SingleTi
     );
 
     _offsetAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.1), // Starts slightly below (y=0.1)
+      begin: widget.offset, 
       end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic)); // Smoother curve
 
     _opacityAnimation = Tween<double>(begin: 0, end: 1).animate(_controller);
 
-    // Start animation after the delay
-    Future.delayed(widget.delay, () {
-      if (mounted) _controller.forward();
-    });
+    // If delay is 0, start immediately. Otherwise, wait.
+    if (widget.delay == Duration.zero) {
+      _controller.forward();
+    } else {
+      Future.delayed(widget.delay, () {
+        if (mounted) _controller.forward();
+      });
+    }
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
+import 'theme/app_theme.dart'; // Import your new theme
 
 void main() {
   runApp(const MyPortfolio());
@@ -13,11 +14,10 @@ class MyPortfolio extends StatelessWidget {
     return MaterialApp(
       title: "Dave's Portfolio",
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'Roboto',
-        useMaterial3: true,
-      ),
+      
+      // APPLY THEME HERE
+      theme: AppTheme.lightTheme, 
+      
       home: const HomeScreen(),
     );
   }
