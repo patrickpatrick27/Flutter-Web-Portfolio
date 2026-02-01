@@ -3,11 +3,11 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"flutter_bootstrap.js": "79adbc8151f38bebea82b4b99227d1bf",
+const RESOURCES = {"flutter_bootstrap.js": "b33b65e4b804d91877a705a77f72e65e",
 "version.json": "9e78c1bf7fa584a7dbbc44dd1b186ecb",
 "index.html": "c7d50356e4cd53559fc09f808da36de7",
 "/": "c7d50356e4cd53559fc09f808da36de7",
-"main.dart.js": "617aa8357677b8d5b9b1c86eb85850d1",
+"main.dart.js": "716c60c0484230fd517d917f2ba2cf36",
 "flutter.js": "24bc71911b75b5f8135c949e27a2984e",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
@@ -22,7 +22,7 @@ const RESOURCES = {"flutter_bootstrap.js": "79adbc8151f38bebea82b4b99227d1bf",
 "assets/shaders/ink_sparkle.frag": "ecc85a2e95f5e9f53123dcaf8cb9b6ce",
 "assets/shaders/stretch_effect.frag": "40d68efbbf360632f614c731219e95f0",
 "assets/AssetManifest.bin": "b9439d681e0861bafcf26b16dd686f7a",
-"assets/fonts/MaterialIcons-Regular.otf": "1d2f16254d9ee640fc49c15ab4a5ce29",
+"assets/fonts/MaterialIcons-Regular.otf": "48febf1df7c2ac6e48d069ed9a27def1",
 "assets/assets/images/nap_finder.png": "3d0dbec4d6a13ffa0fddaf0d446905de",
 "assets/assets/images/kaong_monitor.png": "c5882a62f1914fbf91042c182ce3c135",
 "assets/assets/images/pay_tracker.png": "ca4a37643a93589cdeda9a04c38a32b5",
