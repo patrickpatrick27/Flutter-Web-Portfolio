@@ -5,7 +5,13 @@ import '../widgets/responsive_animation.dart';
 import '../theme/app_theme.dart';
 
 class ProjectsSection extends StatelessWidget {
-  const ProjectsSection({super.key});
+  // New parameter to control delay logic
+  final bool isFirstLoad; 
+
+  const ProjectsSection({
+    super.key, 
+    this.isFirstLoad = false // Defaults to false if not passed
+  });
 
   final List<Map<String, dynamic>> _projects = const [
     {
@@ -40,6 +46,9 @@ class ProjectsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // LOGIC: If first load, wait 900ms. If switching tabs, wait only 50ms.
+    final int baseDelay = isFirstLoad ? 900 : 50;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 20),
@@ -48,37 +57,35 @@ class ProjectsSection extends StatelessWidget {
           constraints: const BoxConstraints(maxWidth: 1100),
           child: Column(
             children: [
+              // 1. TITLE
               FadeSlideTransition(
-                delay: const Duration(milliseconds: 900),
+                delay: Duration(milliseconds: baseDelay),
                 offset: const Offset(0, 0.2),
                 child: const Text("Featured Projects", style: AppTheme.headerStyle),
               ),
+              
               const SizedBox(height: 10),
+              
+              // 2. SUBTITLE
               FadeSlideTransition(
-                delay: const Duration(milliseconds: 1000),
+                delay: Duration(milliseconds: baseDelay + 100),
                 offset: const Offset(0, 0.2),
                 child: const Text("Tap a project to view the code on GitHub", style: AppTheme.subHeaderStyle),
               ),
+              
               const SizedBox(height: 40),
 
-              // --- GRID LOGIC ---
+              // 3. GRID
               LayoutBuilder(
                 builder: (context, constraints) {
-                  // If screen width > 700px, FORCE 2 columns. Otherwise 1.
                   int crossAxisCount = constraints.maxWidth > 700 ? 2 : 1;
-                  
-                  // Aspect Ratio Logic: 
-                  // We want a fixed height of roughly 300px.
-                  // Ratio = Width / Height.
                   double itemWidth = constraints.maxWidth / crossAxisCount;
                   double desiredHeight = 320; 
                   double childAspectRatio = itemWidth / desiredHeight;
 
                   return GridView.builder(
-                    // Critical properties to make GridView work inside a Column
                     shrinkWrap: true, 
                     physics: const NeverScrollableScrollPhysics(),
-                    
                     itemCount: _projects.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: crossAxisCount,
@@ -88,7 +95,8 @@ class ProjectsSection extends StatelessWidget {
                     ),
                     itemBuilder: (context, i) {
                       return FadeSlideTransition(
-                        delay: Duration(milliseconds: 1100 + (i * 200)),
+                        // Cascading delay starts after baseDelay
+                        delay: Duration(milliseconds: (baseDelay + 200) + (i * 100)),
                         offset: const Offset(0, 0.5),
                         child: ProjectCard(
                           title: _projects[i]['title'],
@@ -124,8 +132,6 @@ class ProjectCard extends StatelessWidget {
     required this.url,
     this.imagePath,
     required this.type,
-    // Note: We no longer need to pass width/height manually
-    // because GridView handles the sizing constraints.
   });
 
   Future<void> _launchUrl() async {
@@ -156,7 +162,6 @@ class ProjectCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,10 +189,7 @@ class ProjectCard extends StatelessWidget {
                   Icon(Icons.arrow_outward, size: 20, color: AppTheme.primaryColor)
                 ],
               ),
-              
               const SizedBox(height: 16),
-              
-              // Tag
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
@@ -205,19 +207,13 @@ class ProjectCard extends StatelessWidget {
                   ),
                 ),
               ),
-
               const SizedBox(height: 12),
-              
-              // Title
               Text(title, 
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)
               ),
-                      
               const SizedBox(height: 8),
-              
-              // Description
               Expanded(
                 child: Text(
                   description, 

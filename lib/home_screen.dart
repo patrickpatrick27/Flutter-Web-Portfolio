@@ -15,6 +15,21 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  bool _isFirstLoad = true; // Track if the app just opened
+
+  @override
+  void initState() {
+    super.initState();
+    // After 2 seconds, we know the intro animation is done.
+    // Future tab switches will be instant.
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          _isFirstLoad = false;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // 1. Header
-            // INCREASED DELAY: Waits 500ms so the browser isn't overwhelmed at startup
+            // 1. Header (Only animates on first load)
             const FadeSlideTransition(
               delay: Duration(milliseconds: 500), 
               offset: Offset(0, 0.5),
@@ -33,7 +47,6 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 30),
 
             // 2. Sliding Toggle Button
-            // INCREASED DELAY: Starts after the header is done (800ms)
             FadeSlideTransition(
               delay: const Duration(milliseconds: 800),
               offset: const Offset(0, 0.5),
@@ -45,27 +58,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height: 30),
 
-            // 3. Switcher (With Jitter Fix)
+            // 3. Switcher (Reduced duration for snappier feel)
             AnimatedSwitcher(
-              duration: const Duration(milliseconds: 500),
+              duration: const Duration(milliseconds: 300), // Faster switch
               switchInCurve: Curves.easeOutBack,
               switchOutCurve: Curves.easeIn,
-              
-              // CRITICAL FIX: Forces content to stay anchored to the top
               layoutBuilder: (currentChild, previousChildren) {
                 return Stack(
-                  alignment: Alignment.topCenter, // <--- STOPS THE LAYOUT JUMP
+                  alignment: Alignment.topCenter,
                   children: <Widget>[
                     ...previousChildren,
                     if (currentChild != null) currentChild,
                   ],
                 );
               },
-              
               transitionBuilder: (Widget child, Animation<double> animation) {
                 return SlideTransition(
                   position: Tween<Offset>(
-                    begin: const Offset(0.0, 0.1),
+                    begin: const Offset(0.0, 0.05), // Smaller slide distance
                     end: Offset.zero,
                   ).animate(animation),
                   child: FadeTransition(
@@ -74,8 +84,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               },
+              // PASS THE "_isFirstLoad" FLAG DOWN
               child: _selectedIndex == 0
-                  ? const _ProjectsView(key: ValueKey("projects"))
+                  ? _ProjectsView(key: const ValueKey("projects"), isFirstLoad: _isFirstLoad)
                   : const _AboutView(key: ValueKey("about")),
             ),
 
@@ -90,11 +101,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
 // --- SUB VIEWS ---
 class _ProjectsView extends StatelessWidget {
-  const _ProjectsView({super.key});
+  final bool isFirstLoad;
+  const _ProjectsView({super.key, required this.isFirstLoad});
 
   @override
   Widget build(BuildContext context) {
-    return const ProjectsSection(key: ValueKey("ProjectsSection"));
+    // Pass the flag to the actual section
+    return ProjectsSection(
+      key: const ValueKey("ProjectsSection"), 
+      isFirstLoad: isFirstLoad
+    );
   }
 }
 
