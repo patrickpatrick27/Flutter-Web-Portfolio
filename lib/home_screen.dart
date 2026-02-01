@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'sections/header_section.dart';
 import 'sections/skills_section.dart';
 import 'sections/projects_section.dart';
-import 'widgets/responsive_animation.dart'; // Import our animation
+import 'sections/footer_section.dart';
+// ▼ ADD THIS LINE ▼
+import 'widgets/responsive_animation.dart'; 
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -10,29 +12,32 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white, 
       body: SingleChildScrollView(
         child: Column(
-          children: const [
+          children: [
             FadeSlideTransition(
-              delay: Duration(milliseconds: 0), 
-              child: HeaderSection()
+              delay: const Duration(milliseconds: 0), 
+              child: const HeaderSection()
             ),
-            SizedBox(height: 60),
+            
+            const SizedBox(height: 40),
+            
             FadeSlideTransition(
-              delay: Duration(milliseconds: 300), 
-              child: SkillsSection()
+              delay: const Duration(milliseconds: 400), 
+              child: const SkillsSection()
             ),
-            SizedBox(height: 60),
+            
+            const SizedBox(height: 40),
+            
             FadeSlideTransition(
-              delay: Duration(milliseconds: 600), 
-              child: ProjectsSection()
+              delay: const Duration(milliseconds: 800), 
+              child: const ProjectsSection()
             ),
-            SizedBox(height: 60),
-            // Footer usually doesn't need animation, but you can add it if you like
-            Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Text("© 2026 Dave Portfolio", style: TextStyle(color: Colors.grey)),
-            ),
+            
+            const SizedBox(height: 80),
+            
+            const FooterSection(),
           ],
         ),
       ),

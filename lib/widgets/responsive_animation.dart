@@ -28,7 +28,7 @@ class _FadeSlideTransitionState extends State<FadeSlideTransition> with SingleTi
     );
 
     _offsetAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.1), // Starts slightly below
+      begin: const Offset(0, 0.1), // Starts slightly below (y=0.1)
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
