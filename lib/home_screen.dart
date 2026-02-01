@@ -23,8 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             // 1. Header
+            // INCREASED DELAY: Waits 500ms so the browser isn't overwhelmed at startup
             const FadeSlideTransition(
-              delay: Duration(milliseconds: 0),
+              delay: Duration(milliseconds: 500), 
               offset: Offset(0, 0.5),
               child: HeaderSection(),
             ),
@@ -32,8 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 30),
 
             // 2. Sliding Toggle Button
+            // INCREASED DELAY: Starts after the header is done (800ms)
             FadeSlideTransition(
-              delay: const Duration(milliseconds: 300),
+              delay: const Duration(milliseconds: 800),
               offset: const Offset(0, 0.5),
               child: _SlidingTabBar(
                 selectedIndex: _selectedIndex,
@@ -43,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height: 30),
 
-            // 3. Switcher (FIXED ALIGNMENT)
+            // 3. Switcher (With Jitter Fix)
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 500),
               switchInCurve: Curves.easeOutBack,
@@ -52,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // CRITICAL FIX: Forces content to stay anchored to the top
               layoutBuilder: (currentChild, previousChildren) {
                 return Stack(
-                  alignment: Alignment.topCenter, // <--- STOPS THE JITTER
+                  alignment: Alignment.topCenter, // <--- STOPS THE LAYOUT JUMP
                   children: <Widget>[
                     ...previousChildren,
                     if (currentChild != null) currentChild,

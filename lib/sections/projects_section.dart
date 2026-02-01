@@ -49,13 +49,13 @@ class ProjectsSection extends StatelessWidget {
           child: Column(
             children: [
               FadeSlideTransition(
-                delay: const Duration(milliseconds: 0),
+                delay: const Duration(milliseconds: 900),
                 offset: const Offset(0, 0.2),
                 child: const Text("Featured Projects", style: AppTheme.headerStyle),
               ),
               const SizedBox(height: 10),
               FadeSlideTransition(
-                delay: const Duration(milliseconds: 100),
+                delay: const Duration(milliseconds: 1000),
                 offset: const Offset(0, 0.2),
                 child: const Text("Tap a project to view the code on GitHub", style: AppTheme.subHeaderStyle),
               ),
@@ -88,7 +88,7 @@ class ProjectsSection extends StatelessWidget {
                     ),
                     itemBuilder: (context, i) {
                       return FadeSlideTransition(
-                        delay: Duration(milliseconds: 200 + (i * 200)),
+                        delay: Duration(milliseconds: 1100 + (i * 200)),
                         offset: const Offset(0, 0.5),
                         child: ProjectCard(
                           title: _projects[i]['title'],
