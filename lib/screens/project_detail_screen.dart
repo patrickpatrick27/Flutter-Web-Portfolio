@@ -3,7 +3,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_theme.dart';
 import '../widgets/responsive_animation.dart';
 
-// 1. Convert to StatefulWidget to track scrolling
 class ProjectDetailScreen extends StatefulWidget {
   final Map<String, dynamic> project;
 
@@ -24,8 +23,6 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   }
 
   void _onScroll() {
-    // 2. Threshold check: If scrolled past 20px, toggle state
-    // We use a boolean to ensure we only rebuild when the state actually changes
     final bool scrolledDown = _scrollController.offset > 20;
     
     if (scrolledDown != _isScrolled) {
@@ -48,48 +45,43 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // 3. Define your target colors
-    // "More Grayer" -> Colors.grey[900] (Very dark grey, almost black)
-    // "Text Whiter" -> Colors.white
+    // 1. Logic to check if this is the "No Image" project (Student Attendance)
+    final bool hasImage = widget.project['image'] != null;
+
     final backgroundColor = _isScrolled ? Colors.grey[900] : Colors.white;
     final textColor = _isScrolled ? Colors.white : Colors.black;
 
     return Scaffold(
       backgroundColor: Colors.white,
       
-      // We extend the body so the content slides underneath the header nicely
       extendBodyBehindAppBar: true,
 
       appBar: AppBar(
-        // 4. ANIMATED TITLE COLOR
         title: AnimatedDefaultTextStyle(
           duration: const Duration(milliseconds: 300),
           style: TextStyle(
             fontWeight: FontWeight.bold, 
             fontSize: 18, 
-            color: textColor, // Animate to white
-            fontFamily: 'GoogleSans' // Ensure font matches app theme
+            color: textColor, 
+            fontFamily: 'GoogleSans' 
           ),
           child: Text(widget.project['title']),
         ),
         
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.transparent, // We handle color in flexibleSpace
+        backgroundColor: Colors.transparent, 
         
-        // 5. ANIMATED BACKGROUND
         flexibleSpace: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          color: backgroundColor, // Smooth fade to Dark Grey
+          color: backgroundColor,
         ),
 
-        // 6. ANIMATED BACK BUTTON
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: textColor), // Animate to white
+          icon: Icon(Icons.arrow_back, color: textColor),
           onPressed: () => Navigator.of(context).pop(),
         ),
 
-        // Disable default tint so our custom colors take over
         scrolledUnderElevation: 0,
         surfaceTintColor: Colors.transparent,
       ),
@@ -100,7 +92,6 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 900),
             child: Padding(
-              // Add top padding to account for the App Bar since we extended the body
               padding: const EdgeInsets.only(top: 100, left: 24, right: 24, bottom: 50),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,15 +104,17 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                         width: 120,
                         height: 120,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          // FIX: Force Black background if no image
+                          color: hasImage ? Colors.white : Colors.black,
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 5))],
-                          image: widget.project['image'] != null
+                          image: hasImage
                               ? DecorationImage(image: AssetImage(widget.project['image']), fit: BoxFit.cover)
                               : null,
                         ),
-                        child: widget.project['image'] == null
-                            ? const Icon(Icons.school, size: 50, color: AppTheme.primaryColor)
+                        // FIX: Force White Icon if no image
+                        child: !hasImage
+                            ? const Icon(Icons.school, size: 50, color: Colors.white)
                             : null,
                       ),
                     ),

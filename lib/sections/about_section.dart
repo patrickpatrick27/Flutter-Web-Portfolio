@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/responsive_layout.dart';
-import '../widgets/responsive_animation.dart'; // Import animation widget
+import '../widgets/responsive_animation.dart'; 
 
 class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
@@ -11,13 +11,14 @@ class AboutSection extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 20),
       child: Column(
         children: [
-          const Text("About Me", style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+          const Text(
+            "About Me", 
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)
+          ),
           const SizedBox(height: 30),
           
-          // Added Animation directly here
           FadeSlideTransition(
             delay: const Duration(milliseconds: 200),
-            // Smaller offset (0.2) fixes the alignment issue by making the movement tighter
             offset: const Offset(0, 0.2), 
             child: ResponsiveLayout(
               mobile: _buildContent(isMobile: true),
@@ -30,21 +31,21 @@ class AboutSection extends StatelessWidget {
   }
 
   Widget _buildContent({required bool isMobile}) {
-    // Limits width on desktop for readability
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 900),
       child: Column(
         children: [
-          // Bio
+          // Bio: Removed hardware references, added full Campus name
           Text(
-            "I am a Senior Computer Engineering student at Cavite State University (Don Severino de las Alas Campus), based in Trece Martires City. "
-            "Beyond my academic leadership, I have practical experience developing applications for business, family operations, and thesis requirements.",
+            "I am a Senior Computer Engineering student at Cavite State University - Don Severino de las Alas Campus, based in Trece Martires City. "
+            "My expertise lies in Mobile Development (Flutter) and Data Analytics, focusing on building intuitive, high-performance applications. "
+            "Whether leading student organizations or contributing to open-source projects, I am driven by a single goal: creating software solutions that work.",
             style: const TextStyle(fontSize: 16, height: 1.6, color: Colors.black87),
             textAlign: isMobile ? TextAlign.left : TextAlign.center,
           ),
           const SizedBox(height: 20),
           
-          // Automation Story (Highlight)
+          // The Impact Story
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -55,12 +56,16 @@ class AboutSection extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
-                Text("💡 The 'Solutions-First' Mindset", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueAccent)),
+                Text(
+                  "🚀 The 'NAP Finder' Impact", 
+                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueAccent)
+                ),
                 SizedBox(height: 8),
                 Text(
-                  "I don't just write code; I fix processes. During my first week at Mountain Top Cable TV Networks (a Converge ICT partner), "
-                  "I noticed inefficiencies in data encoding. I immediately built a Google Apps Script to automate the workflow, turning a messy manual task "
-                  "into a coherent, one-click process. This portfolio itself is another example of my drive to build tools that work.",
+                  "I identify operational bottlenecks and solve them with code. "
+                  "During my time at Mountain Top Cable TV Networks, I noticed field technicians struggling to locate connection points using static spreadsheets. "
+                  "I developed 'NAP Finder'—a cross-platform Flutter app integrating OpenStreetMap—to map over 3,000+ data points. "
+                  "What started as a warehouse problem became a deployed solution that modernized the company's field operations.",
                   style: TextStyle(fontSize: 15, height: 1.5),
                 ),
               ],

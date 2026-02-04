@@ -16,11 +16,9 @@ class ProjectsSection extends StatelessWidget {
       "url": "https://github.com/patrickpatrick27/nap_locator",
       "image": "assets/images/nap_finder.png",
       "type": "Work Application",
-      // UPDATED TECH: Removed Google Maps API, Added OpenStreetMap
-      "tech": ["Flutter", "OpenStreetMap", "Firebase", "Geolocation"],
-      // UPDATED STORY
-      "problem": "Locating specific Network Access Point (NAP) boxes was a manual and inefficient process. We needed a way to search for specific Local Convergence Points (LCPs) and get precise location data without scrolling through static lists.",
-      "solution": "I built a location-based app using OpenStreetMap for the internal interface. Users can search for an LCP, see its location, and either copy the coordinates or click a button to open Google Maps. The app uses the device's current GPS to plot a direct route from the user to the actual NAP box.",
+      "tech": ["Flutter", "OpenStreetMap", "Google Sheets API", "Geolocation"],
+      "problem": "Field technicians were struggling to locate specific Network Access Points using only raw coordinates listed in static spreadsheets. Without a visual reference, identifying the correct box location among thousands of entries was slow, confusing, and error-prone.",
+      "solution": "I migrated over 3,000+ data points from legacy files into a live Google Sheets database. I then built a Flutter app that plots these points onto OpenStreetMap. This allows technicians to visually see the NAP locations relative to their real-time GPS position, rather than just reading abstract numbers.",
     },
     {
       "title": "Kaong Fermentation Monitor",
@@ -34,13 +32,14 @@ class ProjectsSection extends StatelessWidget {
     },
     {
       "title": "Student Attendance Tracker",
-      "desc": "Automated student logging via facial recognition.",
+      "desc": "Automated student logging via facial recognition (Offline Capable).",
       "url": "https://github.com/patrickpatrick27/CPEN135-Student-Attendance",
-      "image": null,
+      // NOTE: Keeping image null ensures the black background & white toga icon
+      "image": null, 
       "type": "Academic Project",
       "tech": ["Python", "Flask", "ESP32-CAM", "OpenCV", "Flutter"],
-      "problem": "Manual roll calls in large lecture halls consume 10-15 minutes of class time and are prone to 'buddy punching' (students signing in for friends).",
-      "solution": "We created a hands-free system. An ESP32-CAM positioned at the door captures faces as students enter. A Flask backend processes the images using OpenCV for recognition and automatically marks them 'Present' in the database, viewable via the Flutter admin app.",
+      "problem": "Most smart attendance systems require a stable internet connection to function. However, at CvSU, Wi-Fi availability in classrooms is inconsistent or non-existent, rendering cloud-based solutions useless.",
+      "solution": "We engineered a completely offline system. The ESP32-CAM connects directly to a local server (laptop) via a dedicated hotspot. The system processes facial recognition and logs attendance locally using Python and Flask, requiring zero internet connectivity to function.",
     },
     {
       "title": "Pay Tracker",
@@ -48,15 +47,16 @@ class ProjectsSection extends StatelessWidget {
       "url": "https://github.com/patrickpatrick27/payout_app",
       "image": "assets/images/pay_tracker.png",
       "type": "Personal Project",
-      "tech": ["Flutter", "Google Sheets API", "Cloud Sync", "Dart"],
-      // UPDATED STORY
+      "tech": ["Flutter", "Google Drive API", "Cloud Sync", "Dart"],
       "problem": "I used to track my part-time job hours manually in my phone's notes app. It was tedious to log time-ins and time-outs every day, calculation errors were common, and I was constantly scared of losing all my data if my phone crashed.",
-      "solution": "I developed a dedicated tracker that makes logging hours instant. Instead of local notes, it syncs everything online to Google Sheets. Now, my total pay is calculated automatically, and I never have to worry about data loss because everything is securely backed up in the cloud.",
+      "solution": "I developed a dedicated tracker that makes logging hours instant. Instead of relying on local storage, the app performs a cloud backup directly to Google Drive. This ensures my pay calculations are automated and my data is secure, even if I switch devices.",
     },
   ];
 
   @override
   Widget build(BuildContext context) {
+    // If it's the first load, delay the animations so the header finishes first.
+    // If it's a tab switch, make the delay minimal (50ms) for snappy response.
     final int baseDelay = isFirstLoad ? 900 : 50;
 
     return Container(
@@ -161,6 +161,7 @@ class ProjectCard extends StatelessWidget {
                       width: 60,
                       height: 60,
                       decoration: BoxDecoration(
+                        // Logic: If image is null -> Black Background
                         color: project['image'] == null ? Colors.black : Colors.white,
                         borderRadius: BorderRadius.circular(15),
                         boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))],
@@ -168,6 +169,7 @@ class ProjectCard extends StatelessWidget {
                             ? DecorationImage(image: AssetImage(project['image']), fit: BoxFit.cover)
                             : null,
                       ),
+                      // Logic: If image is null -> White School Icon (Toga)
                       child: project['image'] == null
                           ? const Icon(Icons.school, color: Colors.white, size: 30)
                           : null,
