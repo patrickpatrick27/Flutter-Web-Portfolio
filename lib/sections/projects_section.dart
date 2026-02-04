@@ -18,7 +18,8 @@ class ProjectsSection extends StatelessWidget {
       "type": "Work Application",
       "tech": ["Flutter", "OpenStreetMap", "Google Sheets API", "Geolocation"],
       "problem": "Field technicians were struggling to locate specific Network Access Points using only raw coordinates listed in static spreadsheets. Without a visual reference, identifying the correct box location among thousands of entries was slow, confusing, and error-prone.",
-      "solution": "I migrated over 3,000+ data points from legacy files into a live Google Sheets database. I then built a Flutter app that plots these points onto OpenStreetMap. This allows technicians to visually see the NAP locations relative to their real-time GPS position, rather than just reading abstract numbers.",
+      // UPDATED SOLUTION: Added the specific navigation features (Copy vs Google Maps)
+      "solution": "I migrated over 3,000+ data points from legacy files into a live Google Sheets database and mapped them using OpenStreetMap. To bridge the gap between identification and navigation, I implemented a feature where technicians can either copy the coordinates or click a single button to automatically launch Google Maps, plotting a direct route from their current location to the NAP destination.",
     },
     {
       "title": "Kaong Fermentation Monitor",
@@ -34,7 +35,7 @@ class ProjectsSection extends StatelessWidget {
       "title": "Student Attendance Tracker",
       "desc": "Automated student logging via facial recognition (Offline Capable).",
       "url": "https://github.com/patrickpatrick27/CPEN135-Student-Attendance",
-      // NOTE: Keeping image null ensures the black background & white toga icon
+      // Note: image is null to trigger the Black Background + White Icon logic
       "image": null, 
       "type": "Academic Project",
       "tech": ["Python", "Flask", "ESP32-CAM", "OpenCV", "Flutter"],
@@ -55,8 +56,6 @@ class ProjectsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // If it's the first load, delay the animations so the header finishes first.
-    // If it's a tab switch, make the delay minimal (50ms) for snappy response.
     final int baseDelay = isFirstLoad ? 900 : 50;
 
     return Container(
